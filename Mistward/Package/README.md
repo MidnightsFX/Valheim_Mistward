@@ -27,6 +27,7 @@ These are not ordered.
 - Live modification of configuration values (Recipe & demister range)
 	- demister range changes require the piece to be rebuilt or a server restart right now
 - Mid-mistlands progression demister improvement
+- Optional fuel and configuration for fueling
 
 
 ## Installation (manual)
