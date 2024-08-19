@@ -2,6 +2,9 @@
 using Jotunn.Entities;
 using Jotunn.Managers;
 using Jotunn.Utils;
+using Mistward.common;
+using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -15,9 +18,9 @@ namespace Mistward
     {
         public const string PluginGUID = "MidnightsFX.Mistward";
         public const string PluginName = "Mistward";
-        public const string PluginVersion = "0.5.0";
+        public const string PluginVersion = "0.7.0";
 
-        AssetBundle EmbeddedResourceBundle;
+        internal static AssetBundle EmbeddedResourceBundle;
         public Config cfg;
 
         private void Awake()
@@ -25,7 +28,24 @@ namespace Mistward
             cfg = new Config(Config);
             EmbeddedResourceBundle = AssetUtils.LoadAssetBundleFromResources("Mistward.AssetsEmbedded.mistward", typeof(Mistward).Assembly);
             AddLocalizations();
-            new ValheimPieces(EmbeddedResourceBundle, cfg);
+            // Mistward
+            new JotunnPiece(
+                new Dictionary<string, string>() {
+                    { "name", "Mistward" },
+                    { "catagory", "Misc" },
+                    { "prefab", "MFX_Mistward" },
+                    { "sprite", "mistward_icon" },
+                    { "requiredBench", "piece_stonecutter" }
+                },
+                new Dictionary<string, bool>() { },
+                new Dictionary<string, Tuple<int, bool>>()
+                {
+                    { "BlackMarble", Tuple.Create(30, true) },
+                    { "Copper", Tuple.Create(15, true) },
+                    { "Sap", Tuple.Create(10, true) },
+                    { "BlackCore", Tuple.Create(1, true) },
+                }
+            );
         }
 
         /// <summary>
@@ -56,7 +76,7 @@ namespace Mistward
             // https://valheim-modding.github.io/Jotunn/tutorials/localization.html
             CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
             // load all localization files within the localizations directory
-            Jotunn.Logger.LogInfo("Loading Localizations.");
+            Jotunn.Logger.LogDebug("Loading Localizations.");
             foreach (string embeddedResouce in typeof(Mistward).Assembly.GetManifestResourceNames())
             {
                 if (!embeddedResouce.Contains("Localizations")) { continue; }
@@ -66,7 +86,7 @@ namespace Mistward
                 string cleaned_localization = Regex.Replace(localization, @"\/\/.*", "");
                 // Just the localization name
                 var localization_name = embeddedResouce.Split('.');
-                Jotunn.Logger.LogInfo($"Adding localization: {localization_name[2]}");
+                Jotunn.Logger.LogDebug($"Adding localization: {localization_name[2]}");
                 // Logging some characters seem to cause issues sometimes
                 // if (VFConfig.EnableDebugMode.Value == true) { Logger.LogInfo($"Localization Text: {cleaned_localization}"); }
                 //Localization.AddTranslation(localization_name[2], localization);

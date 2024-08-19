@@ -1,4 +1,4 @@
-﻿# Mistward
+# Mistward
 
 A larger mist-repelling building. Similar to the waywards you find running around the mistlands. This one is more powerful, and requires some more expensive components.
 
@@ -17,15 +17,13 @@ This mod adds a buildable mist disperser that pushes mist further away and is co
 
 This was originally going to be added as part of [Valheim Fortress](https://thunderstore.io/c/valheim/p/MidnightMods/ValheimFortress/) but I thought it might be nice by itself.
 
-|Name|Icon| PieceName|
-|--|--|
-|Mistward| ![Stone Stakes](https://i.postimg.cc/Dfx4RsTW/mistward-icon.png)|`MFX_Mistward`|
+|Name|Icon|PieceName|
+|--|--|--|
+|Mistward| ![mistward](https://i.postimg.cc/Dfx4RsTW/mistward-icon.png)|`MFX_Mistward`|
 
 ## Roadmap Items/ideas
 These are not ordered.
 
-- Live modification of configuration values (Recipe & demister range)
-	- demister range changes require the piece to be rebuilt or a server restart right now
 - Mid-mistlands progression demister improvement
 - Optional fuel and configuration for fueling
 

@@ -70,8 +70,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="common\JotunnPiece.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Pieces.cs" />
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
     <Compile Include="Mistward.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

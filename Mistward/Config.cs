@@ -27,6 +27,11 @@ namespace Mistward
             MistwardRange = BindServerConfig("Mistward", "MistwardRange", 70f, "The distance the mistward effects.", false, 10f, 200f);
         }
 
+        public static ConfigEntry<string> BindServerConfig(string catagory, string key, string value, ConfigDescription configDescription)
+        {
+            return cfg.Bind(catagory, key, value, configDescription);
+        }
+
         /// <summary>
         ///  Helper to bind configs for bool types
         /// </summary>
@@ -37,7 +42,7 @@ namespace Mistward
         /// <param name="description"></param>
         /// <param name="advanced"></param>
         /// <returns></returns>
-        public ConfigEntry<bool> BindServerConfig(string catagory, string key, bool value, string description, bool advanced = false)
+        public static ConfigEntry<bool> BindServerConfig(string catagory, string key, bool value, string description, bool advanced = false)
         {
             return cfg.Bind(catagory, key, value,
                 new ConfigDescription(description,
@@ -56,7 +61,7 @@ namespace Mistward
         /// <param name="description"></param>
         /// <param name="advanced"></param>
         /// <returns></returns>
-        public ConfigEntry<string> BindServerConfig(string catagory, string key, string value, string description, bool advanced = false)
+        public static ConfigEntry<string> BindServerConfig(string catagory, string key, string value, string description, bool advanced = false)
         {
             return cfg.Bind(catagory, key, value,
                 new ConfigDescription(description, null,
@@ -74,7 +79,7 @@ namespace Mistward
         /// <param name="description"></param>
         /// <param name="advanced"></param>
         /// <returns></returns>
-        public ConfigEntry<short> BindServerConfig(string catagory, string key, short value, string description, bool advanced = false, short valmin = 0, short valmax = 150)
+        public static ConfigEntry<short> BindServerConfig(string catagory, string key, short value, string description, bool advanced = false, short valmin = 0, short valmax = 150)
         {
             return cfg.Bind(catagory, key, value,
                 new ConfigDescription(description,
@@ -95,7 +100,7 @@ namespace Mistward
         /// <param name="valmin"></param>
         /// <param name="valmax"></param>
         /// <returns></returns>
-        public ConfigEntry<float> BindServerConfig(string catagory, string key, float value, string description, bool advanced = false, float valmin = 0, float valmax = 150)
+        public static ConfigEntry<float> BindServerConfig(string catagory, string key, float value, string description, bool advanced = false, float valmin = 0, float valmax = 150)
         {
             return cfg.Bind(catagory, key, value,
                 new ConfigDescription(description,
