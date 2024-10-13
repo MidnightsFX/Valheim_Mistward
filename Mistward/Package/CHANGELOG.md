@@ -1,3 +1,9 @@
+ **0.7.1**
+---
+```
+- Adds a missing description for the mistward
+```
+
  **0.7.0**
 ---
 ```

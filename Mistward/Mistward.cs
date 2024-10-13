@@ -18,7 +18,7 @@ namespace Mistward
     {
         public const string PluginGUID = "MidnightsFX.Mistward";
         public const string PluginName = "Mistward";
-        public const string PluginVersion = "0.7.0";
+        public const string PluginVersion = "0.7.1";
 
         internal static AssetBundle EmbeddedResourceBundle;
         public Config cfg;
