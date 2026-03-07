@@ -27,6 +27,24 @@ namespace Mistward
             MistwardRange = BindServerConfig("Mistward", "MistwardRange", 70f, "The distance the mistward effects.", false, 10f, 200f);
         }
 
+        internal static void SetupMainFileWatcher() {
+            // Setup a file watcher to detect changes to the config file
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Path = Path.GetDirectoryName(cfg.ConfigFilePath);
+            // Ignore changes to other files
+            watcher.Filter = $"{Mistward.PluginGUID}.cfg";
+            watcher.Changed += OnConfigFileChanged;
+            watcher.SynchronizingObject = ThreadingHelper.SynchronizingObject;
+            watcher.EnableRaisingEvents = true;
+        }
+
+        private static void OnConfigFileChanged(object sender, FileSystemEventArgs e) {
+            // We only want the config changes being allowed if this is a server (ie in game in a hosted world or dedicated ideally)
+            if (ZNet.instance.IsServer() == false) { return; }
+            cfg.Reload();
+        }
+
         public static ConfigEntry<string> BindServerConfig(string catagory, string key, string value, ConfigDescription configDescription)
         {
             return cfg.Bind(catagory, key, value, configDescription);

@@ -46,6 +46,7 @@ namespace Mistward
                     { "BlackCore", Tuple.Create(1, true) },
                 }
             );
+            Config.SetupMainFileWatcher();
         }
 
         /// <summary>
