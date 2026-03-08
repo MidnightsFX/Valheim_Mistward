@@ -54,8 +54,8 @@ namespace Mistward.common
 
             //Mistward specific
             mistward_pushfield = PiecePrefab.FindDeepChild("Particle_System_Force_Field").GetComponent<ParticleSystemForceField>();
-            mistward_pushfield.endRange = Config.MistwardRange.Value;
-            Config.MistwardRange.SettingChanged += MistwardRangeChange;
+            mistward_pushfield.endRange = ValConfig.MistwardRange.Value;
+            ValConfig.MistwardRange.SettingChanged += MistwardRangeChange;
 
             // Find and register this prefab in the scene, for in-place updates.
             PrefabManager.OnPrefabsRegistered += SetSceneParentPrefab;
@@ -64,22 +64,22 @@ namespace Mistward.common
         private void MistwardRangeChange(object sender, EventArgs e)
         {
             // Update the original
-            mistward_pushfield.endRange = Config.MistwardRange.Value;
+            mistward_pushfield.endRange = ValConfig.MistwardRange.Value;
 
             // Update all that are visible/loaded
             // Get and update all of the in-scene game objects
             IEnumerable<GameObject> objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name.StartsWith(PieceMetadata["prefab"]));
-            if (Config.EnableDebugMode.Value) { Logger.LogInfo($"Found in scene objects: {objects.Count()}"); }
+            if (ValConfig.EnableDebugMode.Value) { Logger.LogInfo($"Found in scene objects: {objects.Count()}"); }
             foreach (GameObject go in objects)
             {
-                if (Config.EnableDebugMode.Value) { Logger.LogInfo($"Found {go.name}"); }
+                if (ValConfig.EnableDebugMode.Value) { Logger.LogInfo($"Found {go.name}"); }
                 ParticleSystemForceField force_system = null;
                 go.FindDeepChild("Particle_System_Force_Field").TryGetComponent<ParticleSystemForceField>(out force_system);
                 if (force_system != null)
                 {
-                    if (Config.EnableDebugMode.Value) { Logger.LogInfo($"{go.name} updating forcefield {Config.MistwardRange.Value}"); }
+                    if (ValConfig.EnableDebugMode.Value) { Logger.LogInfo($"{go.name} updating forcefield {ValConfig.MistwardRange.Value}"); }
                     // For some reason the child reference is not updating the in scene one
-                    force_system.endRange = Config.MistwardRange.Value;
+                    force_system.endRange = ValConfig.MistwardRange.Value;
 
                 }
             }
@@ -88,7 +88,7 @@ namespace Mistward.common
         private void InitialPieceSetup()
         {
             CreateAndUpdateRecipe();
-            BuildCategory = Config.BindServerConfig($"{PieceMetadata["name"]}", $"{PieceMetadata["short_item_name"]}-category", nameof(PieceCategories.Misc), new ConfigDescription("Build piece Category.", PieceCategories.GetAcceptableValueList()));
+            BuildCategory = ValConfig.BindServerConfig($"{PieceMetadata["name"]}", $"{PieceMetadata["short_item_name"]}-category", nameof(PieceCategories.Misc), new ConfigDescription("Build piece Category.", PieceCategories.GetAcceptableValueList()));
             BuildCategory.SettingChanged += CraftingCategory_SettingChanged;
             RequirementConfig[] recipe = new RequirementConfig[UpdatedRecipeData.Count];
             int recipe_index = 0;
@@ -113,7 +113,7 @@ namespace Mistward.common
         private void SetSceneParentPrefab()
         {
             IEnumerable<GameObject> scene_parents = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == PieceMetadata["prefab"]);
-            if (Config.EnableDebugMode.Value) { Logger.LogInfo($"Found {PieceMetadata["prefab"]} scene parent objects: {scene_parents.Count()}"); }
+            if (ValConfig.EnableDebugMode.Value) { Logger.LogInfo($"Found {PieceMetadata["prefab"]} scene parent objects: {scene_parents.Count()}"); }
             ScenePrefab = scene_parents.First();
         }
 
@@ -126,7 +126,7 @@ namespace Mistward.common
                 if (recipe_cfg_default.Length > 0) { recipe_cfg_default += "|"; }
                 recipe_cfg_default += $"{entry.Key},{entry.Value.Item1},{entry.Value.Item2}";
             }
-            RecipeConfig = Config.BindServerConfig($"{PieceMetadata["name"]}", $"{PieceMetadata["short_item_name"]}-recipe", recipe_cfg_default, $"Recipe to craft and upgrade costs. Find item ids: https://valheim.fandom.com/wiki/Item_IDs, at most 4 costs. Format: resouce_id,craft_cost,upgrade_cost eg: Wood,8,2|Iron,12,4|LeatherScraps,4,0", true);
+            RecipeConfig = ValConfig.BindServerConfig($"{PieceMetadata["name"]}", $"{PieceMetadata["short_item_name"]}-recipe", recipe_cfg_default, $"Recipe to craft and upgrade costs. Find item ids: https://valheim.fandom.com/wiki/Item_IDs, at most 4 costs. Format: resouce_id,craft_cost,upgrade_cost eg: Wood,8,2|Iron,12,4|LeatherScraps,4,0", true);
             if (PieceRecipeConfigUpdater(RecipeConfig.Value, true) == false)
             {
                 Logger.LogWarning($"{PieceMetadata["name"]} has an invalid recipe. The default will be used instead.");
@@ -138,12 +138,12 @@ namespace Mistward.common
         private void InitItemConfigs()
         {
             // Populate defaults if they don't exist
-            EnabledConfig = Config.BindServerConfig($"{PieceMetadata["name"]}", $"{PieceMetadata["short_item_name"]}-enabled", PieceToggles["enabled"], $"Enable/Disable the {PieceMetadata["name"]}.");
+            EnabledConfig = ValConfig.BindServerConfig($"{PieceMetadata["name"]}", $"{PieceMetadata["short_item_name"]}-enabled", PieceToggles["enabled"], $"Enable/Disable the {PieceMetadata["name"]}.");
             PieceToggles["enabled"] = EnabledConfig.Value;
             EnabledConfig.SettingChanged += BuildRecipeChanged_SettingChanged;
 
             // Set where the recipe can be crafted
-            BuiltAt = Config.BindServerConfig($"{PieceMetadata["name"]}", $"{PieceMetadata["short_item_name"]}-requiredBench", PieceMetadata["requiredBench"], $"The table required to allow building this piece, eg: 'forge', 'piece_workbench', 'blackforge', 'piece_artisanstation'.");
+            BuiltAt = ValConfig.BindServerConfig($"{PieceMetadata["name"]}", $"{PieceMetadata["short_item_name"]}-requiredBench", PieceMetadata["requiredBench"], $"The table required to allow building this piece, eg: 'forge', 'piece_workbench', 'blackforge', 'piece_artisanstation'.");
             PieceMetadata["requiredBench"] = BuiltAt.Value;
             BuiltAt.SettingChanged += RequiredBench_SettingChanged;
         }
@@ -153,28 +153,28 @@ namespace Mistward.common
             if (sender.GetType() == typeof(ConfigEntry<string>))
             {
                 ConfigEntry<string> sendEntry = (ConfigEntry<string>)sender;
-                if (Config.EnableDebugMode.Value == true) { Logger.LogInfo($"Recieved new piece config {sendEntry.Value}"); }
+                if (ValConfig.EnableDebugMode.Value == true) { Logger.LogInfo($"Recieved new piece config {sendEntry.Value}"); }
                 // return if its an invalid change
                 if (PieceRecipeConfigUpdater(sendEntry.Value) == false) { return; }
             }
 
             RequirementConfig[] recipe = new RequirementConfig[UpdatedRecipeData.Count];
             int recipe_index = 0;
-            if (Config.EnableDebugMode.Value == true) { Logger.LogInfo("Validating and building requirementsConfig"); }
+            if (ValConfig.EnableDebugMode.Value == true) { Logger.LogInfo("Validating and building requirementsConfig"); }
             foreach (KeyValuePair<string, Tuple<int, bool>> entry in UpdatedRecipeData)
             {
                 if (PrefabManager.Instance.GetPrefab(entry.Key) == null)
                 {
-                    if (Config.EnableDebugMode.Value == true) { Logger.LogInfo($"{entry.Key} is not a valid prefab, skipping recipe update."); }
+                    if (ValConfig.EnableDebugMode.Value == true) { Logger.LogInfo($"{entry.Key} is not a valid prefab, skipping recipe update."); }
                     return;
                 }
-                if (Config.EnableDebugMode.Value == true) { Logger.LogInfo($"Checking entry {entry.Key} c:{entry.Value.Item1} r:{entry.Value.Item2}"); }
+                if (ValConfig.EnableDebugMode.Value == true) { Logger.LogInfo($"Checking entry {entry.Key} c:{entry.Value.Item1} r:{entry.Value.Item2}"); }
                 recipe[recipe_index] = new RequirementConfig { Item = entry.Key, Amount = entry.Value.Item1, Recover = entry.Value.Item2 };
                 recipe_index++;
             }
             if (PieceToggles["enabled"])
             {
-                if (Config.EnableDebugMode.Value == true) { Logger.LogInfo("Updating Piece."); }
+                if (ValConfig.EnableDebugMode.Value == true) { Logger.LogInfo("Updating Piece."); }
                 Piece.Requirement[] newRequirements = new Piece.Requirement[UpdatedRecipeData.Count];
                 int index = 0;
                 foreach (var recipe_entry in recipe)
@@ -188,9 +188,9 @@ namespace Mistward.common
                     //newRequirements[index] = recipe_entry.GetRequirement();
                     index++;
                 }
-                if (Config.EnableDebugMode.Value == true) { Logger.LogInfo($"Fixed mock requirements {newRequirements.Length}."); }
+                if (ValConfig.EnableDebugMode.Value == true) { Logger.LogInfo($"Fixed mock requirements {newRequirements.Length}."); }
                 ScenePrefab.GetComponent<Piece>().m_resources = newRequirements;
-                if (Config.EnableDebugMode.Value == true) { Logger.LogInfo($"New requirements set {ScenePrefab.GetComponent<Piece>().m_resources}."); }
+                if (ValConfig.EnableDebugMode.Value == true) { Logger.LogInfo($"New requirements set {ScenePrefab.GetComponent<Piece>().m_resources}."); }
             }
             else
             {
@@ -215,7 +215,7 @@ namespace Mistward.common
                 return;
             }
 
-            if (Config.EnableDebugMode.Value == true) { Logger.LogInfo($"Setting crafting station to {BuiltAt.Value}."); }
+            if (ValConfig.EnableDebugMode.Value == true) { Logger.LogInfo($"Setting crafting station to {BuiltAt.Value}."); }
             ScenePrefab.GetComponent<Piece>().m_craftingStation = craftable_at;
         }
 
@@ -242,7 +242,7 @@ namespace Mistward.common
                         Logger.LogWarning($"{recipe_entry} is invalid, it does not have enough segments. Proper format is: PREFABNAME,COST,REFUND_BOOL eg: Wood,8,false");
                         return false;
                     }
-                    if (Config.EnableDebugMode.Value == true)
+                    if (ValConfig.EnableDebugMode.Value == true)
                     {
                         String split_segments = "";
                         foreach (String segment in recipe_segments)
@@ -272,7 +272,7 @@ namespace Mistward.common
                         return false;
                     }
 
-                    if (Config.EnableDebugMode.Value == true)
+                    if (ValConfig.EnableDebugMode.Value == true)
                     {
                         Logger.LogInfo($"prefab: {recipe_segments[0]} c:{recipe_segments[1]} u:{recipe_segments[2]}");
                     }
@@ -285,7 +285,7 @@ namespace Mistward.common
                     UpdatedRecipeData.Add(entry.Key, entry.Value);
                 }
                 //Logger.LogInfo("Set UpdatedRecipe");
-                if (Config.EnableDebugMode.Value == true)
+                if (ValConfig.EnableDebugMode.Value == true)
                 {
                     String recipe_string = "";
                     foreach (KeyValuePair<string, Tuple<int, bool>> entry in updated_pieceRecipe)

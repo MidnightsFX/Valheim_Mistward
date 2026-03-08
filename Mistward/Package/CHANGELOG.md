@@ -1,3 +1,9 @@
+ **0.7.2**
+---
+```
+- Adds a config file watcher, changes are applied on save
+```
+
  **0.7.1**
 ---
 ```

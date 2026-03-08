@@ -18,14 +18,14 @@ namespace Mistward
     {
         public const string PluginGUID = "MidnightsFX.Mistward";
         public const string PluginName = "Mistward";
-        public const string PluginVersion = "0.7.1";
+        public const string PluginVersion = "0.7.2";
 
         internal static AssetBundle EmbeddedResourceBundle;
-        public Config cfg;
+        public ValConfig cfg;
 
         private void Awake()
         {
-            cfg = new Config(Config);
+            cfg = new ValConfig(Config);
             EmbeddedResourceBundle = AssetUtils.LoadAssetBundleFromResources("Mistward.AssetsEmbedded.mistward", typeof(Mistward).Assembly);
             AddLocalizations();
             // Mistward
@@ -46,7 +46,7 @@ namespace Mistward
                     { "BlackCore", Tuple.Create(1, true) },
                 }
             );
-            Config.SetupMainFileWatcher();
+            ValConfig.SetupMainFileWatcher();
         }
 
         /// <summary>

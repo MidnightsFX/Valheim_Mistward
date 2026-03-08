@@ -1,14 +1,16 @@
-﻿using BepInEx.Configuration;
+﻿using BepInEx;
+using BepInEx.Configuration;
+using System.IO;
 
 namespace Mistward
 {
-    internal class Config
+    internal class ValConfig
     {
         public static ConfigFile cfg;
         public static ConfigEntry<bool> EnableDebugMode;
         public static ConfigEntry<float> MistwardRange;
 
-        public Config(ConfigFile Config)
+        public ValConfig(ConfigFile Config)
         {
             // ensure all the config values are created
             cfg = Config;
