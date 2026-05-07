@@ -1,10 +1,10 @@
 ﻿{
   "name": "Mistward",
   "description": "A bigger configurable mist repeller for endgame mistlands.",
-  "version_number": "0.7.2",
+  "version_number": "0.7.3",
   "website_url": "https://discord.gg/Dmr9PQTy9m",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2202",
-    "ValheimModding-Jotunn-2.19.4"
+    "ValheimModding-Jotunn-2.28.0"
   ]
 }

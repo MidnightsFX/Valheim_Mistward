@@ -1,3 +1,10 @@
+ **0.7.3**
+---
+```
+- Disables server authoritative configs if the mod is not installed on the server
+- Enables enforcement of all clients having the mod in order to connect
+```
+
  **0.7.2**
 ---
 ```

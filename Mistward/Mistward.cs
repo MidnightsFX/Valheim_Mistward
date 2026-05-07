@@ -13,12 +13,13 @@ namespace Mistward
 {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     [BepInDependency(Jotunn.Main.ModGuid)]
-    //[NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
+    [SynchronizationMode(AdminOnlyStrictness.IfOnServer)]
+    [NetworkCompatibility(CompatibilityLevel.ClientMustHaveMod, VersionStrictness.Minor)]
     internal class Mistward : BaseUnityPlugin
     {
         public const string PluginGUID = "MidnightsFX.Mistward";
         public const string PluginName = "Mistward";
-        public const string PluginVersion = "0.7.2";
+        public const string PluginVersion = "0.7.3";
 
         internal static AssetBundle EmbeddedResourceBundle;
         public ValConfig cfg;
